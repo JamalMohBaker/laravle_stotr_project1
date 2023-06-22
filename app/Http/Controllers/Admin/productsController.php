@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,9 +14,37 @@ class productsController extends Controller
      */
     public function index()
     {
-        //
-         DB::table('products')->get();
-        return('admin.products.index');
+        //select products.*, categories.name as category_name
+        //from products
+        //insert join categories on categories.id = products.category_id
+        //"" or "" Left join categories on categories.id = products.category_id
+        // $products = DB::table('products')
+        // ->join('categories','categories.id' ,'=','products.category_id')
+        // //or ->leftJoin('categories','categories.id' ,'=','products.category_id')
+        // ->select(
+        //     [
+        //         'products.*',
+        //         'categories.name as category_name'
+        //     ]
+        // )
+        // ->get(); // return a collection of std object = "array" //last method calling get()
+        
+        
+        // $products=Product::all(); == select * from product
+        $products = Product::leftJoin('categories','categories.id' ,'=','products.category_id')
+        ->select(
+            [
+                'products.*',
+                'categories.name as category_name'
+            ]
+        )
+        ->get();    
+        
+        return view('admin.products.index',[
+            'title' => 'Product List !! ',
+            'products' => $products ,
+
+        ]);
     }
 
     /**
@@ -24,6 +53,7 @@ class productsController extends Controller
     public function create()
     {
         //
+        return view('admin/products/create');
     }
 
     /**
@@ -32,6 +62,17 @@ class productsController extends Controller
     public function store(Request $request)
     {
         //
+        $product = new Product(); // call object from model
+        $product->name = $request->input('name');
+        $product->slug = $request->input('slug');
+        $product->description = $request->input('description');
+        $product->short_description = $request->input('short_description');
+        $product->price = $request->input('price');
+        $product->compare_price = $request->input('compare_price');
+        $product->save();
+        //prg : post redirect get
+       return redirect()->route('products.index'); //GET
+    //    return 'Product save';
     }
 
     /**
