@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,8 +29,8 @@ class productsController extends Controller
         //     ]
         // )
         // ->get(); // return a collection of std object = "array" //last method calling get()
-        
-        
+
+
         // $products=Product::all(); == select * from product
         $products = Product::leftJoin('categories','categories.id' ,'=','products.category_id')
         ->select(
@@ -38,8 +39,8 @@ class productsController extends Controller
                 'categories.name as category_name'
             ]
         )
-        ->get();    
-        
+        ->get();
+
         return view('admin.products.index',[
             'title' => 'Product List !! ',
             'products' => $products ,
@@ -53,7 +54,11 @@ class productsController extends Controller
     public function create()
     {
         //
-        return view('admin/products/create');
+        $categories = Category::all(); // collection (array)
+        return view('admin/products/create',[
+            'product'=> new product(),
+            'categories'=>$categories,
+        ]);
     }
 
     /**
@@ -61,17 +66,31 @@ class productsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'name' => 'required|max:255|min:3',
+            'slug' => 'required|unique:products,slug',
+            'category_id' => 'nullable|int|exists:categories,id',
+            'descriprion' => 'nullable|string',
+            'short_description' => 'nullable|string|max:500',
+            'price' => 'nullable|required|numeric|min:0', // not accept negative value
+            'compare_price' => 'nullable|numeric|min:0|gt:price',
+            'image' => 'nullable|image|dimensions:min_width=400,min_height=300|max:1024',
+        ];
+        $request->validate($rules);
+
         $product = new Product(); // call object from model
         $product->name = $request->input('name');
         $product->slug = $request->input('slug');
+        $product->category_id = $request->input('category_id');
         $product->description = $request->input('description');
         $product->short_description = $request->input('short_description');
         $product->price = $request->input('price');
         $product->compare_price = $request->input('compare_price');
         $product->save();
         //prg : post redirect get
-       return redirect()->route('products.index'); //GET
+       return redirect()
+       ->route('products.index')
+       ->with('success',"Product ({$product->name}) created!"); //Add flash message with name=succe
     //    return 'Product save';
     }
 
@@ -88,7 +107,16 @@ class productsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $categories = Category::all();
+        // $product = Product::where('id','=',$id)->first(); return Model or NULL
+        $product=Product::findOrFail($id); //return Model or NULL
+        // if(!$product){
+        //     abort(404); if use find($id) without using findOrFail($id)
+        // }
+        return view('admin.products.edit' , [
+            'product' => $product,
+            'categories'=>$categories,
+        ]);
     }
 
     /**
@@ -96,7 +124,31 @@ class productsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $rules = [
+            'name' => 'required|max:255|min:3',
+            'slug' => "required|unique:products,slug,$id", // $this->id does not in search
+            'category_id' => 'nullable|int|exists:categories,id',
+            'descriprion' => 'nullable|string',
+            'short_description' => 'nullable|string|max:500',
+            'price' => 'nullable|required|numeric|min:0', // not accept negative value
+            'compare_price' => 'nullable|numeric|min:0|gt:price',
+            'image' => 'nullable|image|dimensions:min_width=400,min_height=300|max:1024',
+        ];
+        $request->validate($rules);
+
+        $product = Product::findOrFail($id); // call object from model
+        $product->name = $request->input('name');
+        $product->slug = $request->input('slug');
+        $product->category_id = $request->input('category_id');
+        $product->description = $request->input('description');
+        $product->short_description = $request->input('short_description');
+        $product->price = $request->input('price');
+        $product->compare_price = $request->input('compare_price');
+        $product->save();
+        //prg : post redirect get
+       return redirect()->route('products.index')
+       ->with('success',"Product ({$product->name}) Updated!"); //GET
+        //    return 'Product save';
     }
 
     /**
@@ -104,6 +156,11 @@ class productsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // product::destroy($id);// short way
+        $product = Product::findOrFail($id);
+        $product->delete();
+        // 130 131 line this war for retrive an information
+        return redirect()->route('products.index')
+        ->with('success',"Product ({$product->name}) deleted!");
     }
 }
