@@ -58,6 +58,11 @@ class productsController extends Controller
         return view('admin/products/create',[
             'product'=> new product(),
             'categories'=>$categories,
+            'status_option' => [
+                'active'=>'active',
+                'draft'=>'draft',
+                'archived'=>'archived',
+            ],
         ]);
     }
 
@@ -75,7 +80,9 @@ class productsController extends Controller
             'price' => 'nullable|required|numeric|min:0', // not accept negative value
             'compare_price' => 'nullable|numeric|min:0|gt:price',
             'image' => 'nullable|image|dimensions:min_width=400,min_height=300|max:1024',
+            'status' => 'required|in:active,draft,archived',
         ];
+        
         $request->validate($rules);
 
         $product = new Product(); // call object from model
@@ -86,6 +93,7 @@ class productsController extends Controller
         $product->short_description = $request->input('short_description');
         $product->price = $request->input('price');
         $product->compare_price = $request->input('compare_price');
+        $product->status = $request->input('status','active');
         $product->save();
         //prg : post redirect get
        return redirect()
@@ -116,6 +124,11 @@ class productsController extends Controller
         return view('admin.products.edit' , [
             'product' => $product,
             'categories'=>$categories,
+            'status_option' => [
+                'active' => 'active',
+                'draft' => 'draft',
+                'archived' => 'archived',
+            ],
         ]);
     }
 
@@ -133,6 +146,7 @@ class productsController extends Controller
             'price' => 'nullable|required|numeric|min:0', // not accept negative value
             'compare_price' => 'nullable|numeric|min:0|gt:price',
             'image' => 'nullable|image|dimensions:min_width=400,min_height=300|max:1024',
+            'status' => 'required|in:active,draft,archived',
         ];
         $request->validate($rules);
 
@@ -144,6 +158,7 @@ class productsController extends Controller
         $product->short_description = $request->input('short_description');
         $product->price = $request->input('price');
         $product->compare_price = $request->input('compare_price');
+        $product->status = $request->input('status','active');
         $product->save();
         //prg : post redirect get
        return redirect()->route('products.index')
