@@ -27,4 +27,12 @@ Route::get('/', function () {
 // Route::get('/admin/products/{id}/edit', [productsController::class,'edit']);
 // Route::put('/admin/products/{id}', [productsController::class,'update']);
 // Route::delete('/admin/products/{id}', [productsController::class,'destroy']);
+
+Route::resource('/admin/category', productsController::class);
+Route::get('/admin/products/trashed' , [productsController::class , 'trashed'])
+        ->name('products.trashed');
+Route::put('/admin/products/{product}/restore' , [productsController::class , 'restore'])
+        ->name('products.restore');
+Route::delete('/admin/products/{product}/force' , [productsController::class , 'forceDelete'])
+        ->name('products.force-delete');
 Route::resource('/admin/products', productsController::class);

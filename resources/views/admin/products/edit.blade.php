@@ -3,7 +3,7 @@
 @section('content')
     <h2 class="mb-4 fs-3"> Edit Product</h2>
 
-    <form action="{{ route('products.update' , $product->id) }}" method="post">
+    <form action="{{ route('products.update' , $product->id) }}" method="post" enctype="multipart/form-data">
         <!-- {{ csrf_field() }} -->
         @csrf
         {{-- Comment: Form Methood Spoofing --}}
