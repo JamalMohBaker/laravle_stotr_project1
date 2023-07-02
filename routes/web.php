@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\productsController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,9 +17,9 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/products/{product}', [\App\Http\Controllers\Admin\productsController::class, 'show'] )
+->name('shop.products.show');
 
 // Route::get('/admin/products', [productsController::class,'index']);
 // Route::get('/admin/products/create', [productsController::class,'create']);

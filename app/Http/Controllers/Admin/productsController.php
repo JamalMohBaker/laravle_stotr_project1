@@ -43,6 +43,9 @@ class productsController extends Controller
                 'categories.name as category_name'
             ]
         )
+        // ->withoutGlobalScope('owner') //to remove global scope
+        //->active() //call this implement function from Models/product.php
+        // ->status('active') //call this implement function from Models/product.php
         ->paginate(5);
 
         return view('admin.products.index',[

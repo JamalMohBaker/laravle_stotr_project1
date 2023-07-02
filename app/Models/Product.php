@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -39,7 +40,20 @@ class Product extends Model
         }
         return 'https://placeholder.co/600x600';
     }
-
+    protected static function booted()
+    {
+        static::addGlobalScope('owner',function(Builder $query){
+            // $query->where('user_id','=', 1);
+        });
+    }
+    //local scope
+    public function scopeActive(Builder $query){
+        $query->where('status','=','active');
+    }
+    //local scope
+    public function scopeStatus(Builder $query , $status){
+        $query->where('status','=',$status);
+    }
     public function getNameAttribute($value)
     {
         return ucwords($value);// return first letter upper case for all word
@@ -48,5 +62,10 @@ class Product extends Model
     {   
         $formatter = new NumberFormatter ('en', NumberFormatter::CURRENCY);
         return $formatter->formatCurrency($this->price, 'ILS');
+    }
+    public function getComparePriceFormattedAttribute()
+    {   
+        $formatter = new NumberFormatter ('en', NumberFormatter::CURRENCY);
+        return $formatter->formatCurrency($this->compare_price, 'ILS');
     }
 }
