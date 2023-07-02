@@ -10,7 +10,7 @@ class ProductsController extends Controller
 {
     public function index()
     {
-        
+
     }
     public function show($slug)
     {
@@ -18,6 +18,7 @@ class ProductsController extends Controller
         ->withoutGlobalScope('owner')
         ->where('slug', '=', $slug)
         ->firstOrfail();
+        // dd($product);
         $gallery = productImage::where('product_id' , '=' , $product->id)->get();
         return view('shop.products.show' , [
             'product' => $product,
