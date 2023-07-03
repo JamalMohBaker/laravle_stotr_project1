@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Admin\productsController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,24 +16,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/products/{product}', [\App\Http\Controllers\ProductsController::class, 'show'] )
-->name('shop.products.show');
 
-// Route::get('/admin/products', [productsController::class,'index']);
-// Route::get('/admin/products/create', [productsController::class,'create']);
-// Route::post('/admin/products', [productsController::class,'store']);
-// Route::get('/admin/products/{id}', [productsController::class,'show']);
-// Route::get('/admin/products/{id}/edit', [productsController::class,'edit']);
-// Route::put('/admin/products/{id}', [productsController::class,'update']);
-// Route::delete('/admin/products/{id}', [productsController::class,'destroy']);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::resource('/admin/category', productsController::class);
-Route::get('/admin/products/trashed' , [productsController::class , 'trashed'])
-        ->name('products.trashed');
-Route::put('/admin/products/{product}/restore' , [productsController::class , 'restore'])
-        ->name('products.restore');
-Route::delete('/admin/products/{product}/force' , [productsController::class , 'forceDelete'])
-        ->name('products.force-delete');
-Route::resource('/admin/products', productsController::class);
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])
+    ->middleware('password.confirm')
+    ->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
+require __DIR__.'/admin.php';
+require __DIR__.'/shop.php';
