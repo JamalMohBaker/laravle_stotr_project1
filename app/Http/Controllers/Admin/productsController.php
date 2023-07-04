@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\productimage;
 use App\Models\productImage as ModelsProductImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -75,7 +76,7 @@ class productsController extends Controller
         return view('admin.products.trashed',[
             'products' => $products ,
         ]
-            
+
     );
     }
     public function restore( $id)
@@ -188,6 +189,7 @@ class productsController extends Controller
             //**public=>locale storage** / ** uploade/images file for storage**
             $data['image'] = $path;
         }
+        $data['user_id'] = Auth::id();
         $old_image = $product->image;
         //Mass assignment
         $product->update( $data );
@@ -228,7 +230,7 @@ class productsController extends Controller
         // $product = Product::findOrFail($id);
         $product->delete();
         // 130 131 line this war for retrive an information
-        
+
         return redirect()->route('products.index')
         ->with('success',"Product ({$product->name}) deleted!");
     }

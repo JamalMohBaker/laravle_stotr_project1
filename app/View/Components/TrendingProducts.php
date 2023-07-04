@@ -19,9 +19,10 @@ class TrendingProducts extends Component
     {
         $this->title = $title;
         $this->products = Product::withoutGlobalScope('owner') // ignore global scope
+                    ->with('category') // name of relationship **for performance** لتقليل عملية الاستعلام
                     -> active()
                     ->latest('updated_at')
-                    ->take($count) // = limit(5) just number of products 
+                    ->take($count) // = limit(5) just number of products
                     ->get();
     }
 
