@@ -3,7 +3,7 @@
 @section('content')
    <header class=" mb-4 d-flex">
     <h2 class="mb-4 fs-3">{{$title}} </h2>
-    <div class="ml-auto">  
+    <div class="ml-auto">
         <a href="{{ route('products.create') }}" class="btn btn-sm btn-primary">
             + Create Product
         </a>
@@ -17,7 +17,24 @@
         {{ session('success') }}
     </div>
     @endif
-
+    <form action="{{ URL::current() }}" method="get" class="form-inline">
+        <input type="text" name="search" value="{{ request('search') }}" class="form-control mb-2 mr-2" placeholder="search...">
+        <select name="category_id" id="" class="form-control mb-2 mr-2" >
+            <option value="">All Categories</option>
+            @foreach($categories as $category)
+            <option value="{{ $category->id }}" @selected(request('category_id') == $category->id )>{{ $category->name }}</option>
+            @endforeach
+        </select>
+        <select name="status" id="" class="form-control mb-2 mr-2" >
+            <option value="">Status</option>
+            @foreach($status_options as $value => $text)
+            <option value="{{ $value }}" @selected(request('status') == $value )>{{ $text }}</option>
+            @endforeach
+        </select>
+        <input type="number" name="price_min" value="{{ request('price_min') }}" class="form-control mb-2 mr-2" placeholder="price_min">
+        <input type="number" name="price_max" value="{{ request('price_max') }}" class="form-control mb-2 mr-2" placeholder="price_max">
+        <button type="submit" class="btn btn-dark form-control mb-2 mr-2">Filter</button>
+    </form>
     <table class="table">
         <thead>
             <tr>

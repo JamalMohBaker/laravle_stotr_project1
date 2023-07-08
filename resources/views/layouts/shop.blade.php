@@ -87,12 +87,16 @@
                     <div class="col-lg-4 col-md-4 col-12">
                         <div class="top-end">
                            {{-- @auth // @guest --}}
-                            @if(Auth::check())
+                            {{-- @if(Auth::check()) --}}
+                            @auth
                             <div class="user">
                                 <i class="lni lni-user"></i>
                                 {{ Auth::user()->profile->first_name }}
                             </div>
                             <ul class="user-login">
+                                <li>
+                                    <a href="{{ route('profile.edit') }}">profile</a>
+                                </li>
                                 <li>
                                     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
                                 </li>
@@ -100,6 +104,7 @@
                             <form id="logoutForm" action="{{ route('logout') }} " method="POST" style="display: none">
                                 @csrf
                             </form>
+
                             @else
                             <div class="user">
                                 <i class="lni lni-user"></i>
@@ -111,8 +116,8 @@
                                     <a href="{{ route('login') }}">Sign In</a>
                                 </li>
                             </ul>
-                            @endif
-                            {{-- @endauth --}}
+                            {{-- @endif --}}
+                            @endauth
                         </div>
                     </div>
                 </div>

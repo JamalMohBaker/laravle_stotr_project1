@@ -55,7 +55,29 @@ class Product extends Model
             'name' => 'Uncategorized',
         ]);
     }
+    // withot record video on youtube
+    public function gallery()
+    {
+        return $this->hasMany(productImage::class);
+    }
+    // invers many to many
+    public function cart()
+    {
+        return $this->belongsToMany(
+            user::class , // Related model (user) ** return of relation
+             'carts' ,      // pivot table (default = product_user)
+             'product_id',     // Fk current model in pivot table
+             'user_id'   // Fk current model in pivot table
 
+                //carts name Median table جدول الوسيط
+                // 'user_id', 'product_id' => forigen key in table and orderBy accending
+            )
+            ->withPivot(['quantity']) // return quantity field حقل
+            ->withTimestamps() // return Timestamps field
+            ->using(Cart::class) // Model cart
+            // last three are optional
+            ;
+    }
     //local scope
     public function scopeActive(Builder $query){
         $query->where('status','=','active');
@@ -77,5 +99,29 @@ class Product extends Model
     {
         $formatter = new NumberFormatter ('en', NumberFormatter::CURRENCY);
         return $formatter->formatCurrency($this->compare_price, 'ILS');
+    }
+
+    public function scopeFilter($query,  $filters)
+    {
+        $query->when($filters['search'] ?? false , function($query, $value){
+            //$query = $products // $value = $products
+            $query->where(function($query) use ($value){
+                $query->where('products.name','LIKE', "%{$value}%")
+                ->orWhere('products.description','LIKE', "%{$value}%");
+            });
+        })
+        ->when($filters['status'] ?? false , function($query, $value){
+            //$query = $products // $value = $products
+            $query->where('products.status','LIKE', "%{$value}%");
+        })
+        ->when($filters['category_id'] ?? false , function($query, $value){
+            $query->where('products.category_id','>=', $value);
+        })
+        ->when($filters['price_min'] ?? false , function($query, $value){
+            $query->where('products.price','>=', $value);
+        })
+        ->when( $filters['price_max'] ?? false , function($query, $value){
+            $query->where('products.price','<=', $value);
+        });
     }
 }

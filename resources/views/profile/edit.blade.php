@@ -1,29 +1,66 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+<x-shop-layout title="Update profile">
+   <!-- Start Contact Area -->
+   <section id="contact-us" class="contact-us section">
+    <div class="container">
+        <div class="contact-head">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-title">
+                        <h2>Update Your profile </h2>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
+                    </div>
                 </div>
             </div>
+            <div class="contact-info">
+                <div class="row">
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
+                    <div class="col-12">
+                        <div class="contact-form-head">
+                            <div class="form-main">
+                                <form class="form" method="post" action="{{ route('profile.update') }}">
+                                    @csrf
+                                    @method('patch')
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-12">
+                                            <div class="form-group">
+                                                <input name="first_name" value="{{ old('first_name', $user->profile->first_name) }}" type="text" placeholder="First Name"
+                                                    required="required">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-12">
+                                            <div class="form-group">
+                                                <input name="last_name" type="text" placeholder="Last Name"
+                                                value="{{ old('last_name', $user->profile->last_name) }}"  required="required">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-12">
+                                            <div class="form-group">
+                                                <input name="email" type="email" placeholder="Your Email"
+                                                value="{{ old('email', $user->email) }}"   required="required">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-12">
+                                            <div class="form-group">
+                                                <input name="birthday" type="date" placeholder="BirthDay"
+                                                value="{{ old('birthday', $user->profile->birthday) }}"
+                                                    required="required">
+                                            </div>
+                                        </div>
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
+                                        <div class="col-12">
+                                            <div class="form-group button">
+                                                <button type="submit" class="btn ">Update</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+</section>
+<!--/ End Contact Area -->
+</x-shop-layout>

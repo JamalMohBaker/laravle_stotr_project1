@@ -49,4 +49,26 @@ class User extends Authenticatable implements MustVerifyEmail
             'first_name' => 'No Name',
         ]);
     }
+    public function product()
+    {
+        return $this->hasMany(Product::class);
+    }
+    // User has many products in the cart
+    public function cart()
+    {
+        return $this->belongsToMany(
+            Product::class , // Related model (products) ** return of relation
+             'carts' ,      // pivot table (default = product_user)
+             'user_id',     // Fk current model in pivot table
+             'product_id'   // Fk current model in pivot table
+
+                //carts name Median table جدول الوسيط
+                // 'user_id', 'product_id' => forigen key in table and orderBy accending
+            )
+            ->withPivot(['quantity']) // return quantity field حقل
+            ->withTimestamps() // return Timestamps field
+            ->using(Cart::class) // Model cart
+            // last three are optional
+            ;
+    }
 }

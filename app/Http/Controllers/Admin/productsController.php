@@ -12,13 +12,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 
 class productsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function __construct(Request $request)
+    {
+       if($request->method() == 'GET'){
+            $categories = Category::all(); // collection (array)
+            View::share([
+                // any file view can use this variable
+                'categories'=>$categories,
+                'status_options' =>  product::statusOptions(),
+
+            ]);
+       }
+    }
+    public function index(Request $request)
     {
         //select products.*, categories.name as category_name
         //from products
@@ -47,6 +60,7 @@ class productsController extends Controller
         // ->withoutGlobalScope('owner') //to remove global scope
         //->active() //call this implement function from Models/product.php
         // ->status('active') //call this implement function from Models/product.php
+        ->filter($request->all())
         ->paginate(5);
 
         return view('admin.products.index',[
@@ -62,13 +76,11 @@ class productsController extends Controller
     public function create()
     {
         //
-        $categories = Category::all(); // collection (array)
         return view('admin/products/create',[
             'product'=> new product(),
-            'categories'=>$categories,
-            'status_option' =>  product::statusOptions(),
 
         ]);
+
     }
     public function trashed()
     {
@@ -155,7 +167,7 @@ class productsController extends Controller
     public function edit(Product $product)
     {
 
-        $categories = Category::all();
+        //$categories = Category::all();
 
         $gallery = productImage::where('product_id' , '=' , $product->id)->get();
         // $product = Product::where('id','=',$id)->first(); return Model or NULL
@@ -165,8 +177,6 @@ class productsController extends Controller
         // }
         return view('admin.products.edit' , [
             'product' => $product,
-            'categories'=>$categories,
-            'status_option' =>  product::statusOptions(),
             'gallery' => $gallery,
         ]);
     }
