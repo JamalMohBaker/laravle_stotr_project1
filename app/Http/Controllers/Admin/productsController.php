@@ -28,6 +28,7 @@ class productsController extends Controller
                 'categories'=>$categories,
                 'status_options' =>  product::statusOptions(),
 
+
             ]);
        }
     }

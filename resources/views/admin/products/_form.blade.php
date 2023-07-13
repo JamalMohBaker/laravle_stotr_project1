@@ -38,7 +38,7 @@
         <div class="mb-3">
             <label for="status">status</label>
             <div>
-                @foreach ($status_option as $value => $label)
+                @foreach ($status_options as $value => $label)
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="status" id="status_{{ $value }}" value="{{ $value }} " @checked($value == old('status',$product->status))>
                         <label class="form-check-label" for="status_{{ $value }}">
@@ -54,9 +54,9 @@
          <x-form.select label="Category" id="category_id" name="category_id" :value="$product->category_id" :options="$categories->pluck('name', 'id')" /> {{-- pluck() return array for single value   --}}
             <x-form.input type="number" label="Price" id="price" name="price" value="{{ $product->price }}" />
         <x-form.input type="number" label="Compare Price" id="compare_price" name="compare_price" value="{{ $product->compare_price }}" />
-            
 
-        
+
+
         <div class="mb-3">
 
             <img src="{{ asset( $product->image_url ) }}" width="100" alt="">

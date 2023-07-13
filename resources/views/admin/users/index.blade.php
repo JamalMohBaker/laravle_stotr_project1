@@ -2,12 +2,12 @@
 
 @section('content')
    <header class=" mb-4 d-flex">
-    <h2 class="mb-4 fs-3"> Categories </h2>
+    <h2 class="mb-4 fs-3"> Users </h2>
     <div class="ml-auto">
-        <a href="{{ route('categories.create') }}" class="btn btn-sm btn-primary">
-            + Create category
+        <a href="{{ route('usres.createe') }}" class="btn btn-sm btn-primary">
+            + Create User
         </a>
-        <a href="{{ route('categories.trashed') }}" class="btn btn-sm btn-danger">
+        <a href="{{ route('users.trashed') }}" class="btn btn-sm btn-danger">
             <i class="fas fa-trash"></i> View trash
         </a>
     </div>
@@ -24,24 +24,30 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Products #</th>
-                <th>edit</th>
-                <th>delete</th>
+                <th>Email</th>
+                <th>Email_verified_at</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($categories as $category)
+            @foreach ($users as $user)
             <tr>
-                <td>{{ $category->id }}</td>
+                <td>{{ $user->id }}</td>
 
-                <td>{{ $category->name }}</td>
-                <td>{{ $category->products_count }}</td>
+                <td>{{ $user->name }}</td>
+                <td>{{ $user->email }}</td>
+                <td>{{ $user->email_verified_at }}</td>
+                <td>{{ $user->type }}</td>
+                <td>{{ $user->status }}</td>
 
                 {{-- href="{{ route('products.edit', $product->id) }}" --}}
                 {{-- categories.edit reference to edit() function in controller --}}
-                <td><a href="{{ route('categories.edit', $category->name) }}" class="btn btn-sm btn-outline-dark"><i class="far fa-edit"></i> Edit</a></td>
+                <td><a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-outline-dark"><i class="far fa-edit"></i> Edit</a></td>
                 <td>
-                    <form action="{{ route('categories.destroy', $category->name) }}" method="post">
+                    <form action="{{ route('users.destroy', $user->id) }}" method="post">
                         @csrf
                         @method('delete')
                         <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
@@ -54,7 +60,7 @@
         </tbody>
     </table>
 
-    {{ $categories->links() }}
+    {{ $users->links() }}
 
 <script>
     // to hidden flash message after 5 seconed
