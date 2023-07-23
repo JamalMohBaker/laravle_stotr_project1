@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\productsController;
 use App\Http\Controllers\admin\UsersController;
 use App\Http\Controllers\ProductsController as ControllersProductsController;
@@ -34,12 +35,15 @@ Route::middleware(['auth', 'auth.type:admin,super-admin'])->prefix('/admin')->gr
 
     Route::delete('/users/{user}/force' , [UsersController::class , 'forceDelete'])
                 ->name('users.force-delete');
+    Route::put('/users/updatepass/{user}' , [UsersController::class , 'updatepass'])
+    ->name('users.updatepass');
+    Route::get('/users/{user}/editpass' , [UsersController::class , 'editpass'])
+    ->name('users.editpass');
     Route::get('/users/createe', [UsersController::class, 'create'])->name('usres.createe');
 
     Route::resource('/users', UsersController::class);
-
-
     Route::resource('/categories', CategoriesController::class);
+    Route::resource('/orders', OrdersController::class);
 
 
 

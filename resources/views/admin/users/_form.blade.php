@@ -8,6 +8,9 @@
     <div class="col-12">
         <x-form.input type="password" label="password" id="password" name="password" />
     </div>
+    <div class="col-12">
+        <x-form.input type="password" label="password" id="password" name="password_confirmation" />
+    </div>
     {{-- <div class="col-12">
         <x-form.input type="password" label="password_confirmation" id="password_confirmation" name="password_confirmation"  />
     </div> --}}

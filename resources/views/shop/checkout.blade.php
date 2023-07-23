@@ -1,4 +1,18 @@
-
+@if($errors->any())
+    <div class="alert alert-danger">
+        you have some errors:
+        <ul>
+            @foreach($errors->all() as $error)
+            <li> {{ $error }} </li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+    @if(session()->has('success'))
+    <div id="success-message" class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
 <x-shop-layout title="Checkout">
 
 
@@ -91,24 +105,17 @@
                                                             <option value="0">select</option>
                                                             @foreach ($countries as $code => $name)
                                                             <option @selected($code == old('customer_country_code')) value="{{ $code }}">{{ $name }}</option>
-
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12">
-                                                <div class="single-checkbox checkbox-style-3">
-                                                    <input type="checkbox" id="checkbox-3">
-                                                    <label for="checkbox-3"><span></span></label>
-                                                    <p>My delivery and mailing addresses are the same.</p>
-                                                </div>
-                                            </div>
+
                                             <div class="col-md-12">
                                                 <div class="single-form button">
-                                                    <button class="btn" data-bs-toggle="collapse"
-                                                        data-bs-target="#collapseFour" aria-expanded="false"
-                                                        aria-controls="collapseFour">next
-                                                        step</button>
+                                                    <button class="btn" type="submit" >
+                                                        place order
+                                                        </button>
                                                 </div>
                                             </div>
                                         </div>

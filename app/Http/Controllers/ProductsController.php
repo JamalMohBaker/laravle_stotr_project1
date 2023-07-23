@@ -14,15 +14,19 @@ class ProductsController extends Controller
     }
     public function show($slug)
     {
+        // dd($slug);
         $product = Product::active()
         ->withoutGlobalScope('owner')
+        // ->slug($slug)
         ->where('slug', '=', $slug)
+
         ->firstOrfail();
-        // dd($product);
+
         $gallery = productImage::where('product_id' , '=' , $product->id)->get();
         return view('shop.products.show' , [
             'product' => $product,
             'gallery' => $gallery,
         ]);
+
     }
 }

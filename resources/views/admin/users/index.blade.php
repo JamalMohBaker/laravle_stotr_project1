@@ -30,6 +30,7 @@
                 <th>Status</th>
                 <th>Edit</th>
                 <th>Delete</th>
+                <th>Edit password</th>
             </tr>
         </thead>
         <tbody>
@@ -53,6 +54,7 @@
                         <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
                     </form>
                 </td>
+                <td><a href="{{ route('users.editpass', $user->id) }}" class="btn btn-sm btn-outline-dark"><i class="far fa-edit"></i> Edit Password</a></td>
             </tr>
 
             @endforeach

@@ -33,7 +33,14 @@ class productsController extends Controller
        }
     }
     public function index(Request $request)
+
     {
+        /*
+        // foreach($request as $req){
+        //     echo $req ;
+        // }
+
+
         //select products.*, categories.name as category_name
         //from products
         //insert join categories on categories.id = products.category_id
@@ -48,7 +55,7 @@ class productsController extends Controller
         //     ]
         // )
         // ->get(); // return a collection of std object = "array" //last method calling get()
-
+        */
 
         // $products=Product::all(); == select * from product
         $products = Product::leftJoin('categories','categories.id' ,'=','products.category_id')
@@ -62,6 +69,7 @@ class productsController extends Controller
         //->active() //call this implement function from Models/product.php
         // ->status('active') //call this implement function from Models/product.php
         ->filter($request->all())
+
         ->paginate(5);
 
         return view('admin.products.index',[

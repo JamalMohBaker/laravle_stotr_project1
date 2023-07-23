@@ -16,7 +16,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(8);
+        $users = User::paginate(5);
         return view('admin.users.index',[
             'users' => $users,
         ]);
@@ -45,7 +45,7 @@ class UsersController extends Controller
         $user = User::create($data);
         return redirect()
             ->route('users.index')
-            ->with('success',"Caetgory ({$user->name}) created!");
+            ->with('success',"User ({$user->name}) created!");
     }
 
     /**
@@ -63,12 +63,15 @@ class UsersController extends Controller
     {
         $typesOptions = User::typesOptions();
         $status_options = User::statusOptions();
+
         return view('admin.users.edit' , [
             'user' => $user,
             'typesOptions' => $typesOptions,
             'status_options' => $status_options,
+
         ]);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -76,9 +79,31 @@ class UsersController extends Controller
     public function update(UserRequest $request, User $user)
     {
         $data = $request->validated();
+        // $data = $request->except(['password', 'editpassword']);
+        // $data = $request->except('password');
         $user->update($data);
         return redirect()->route('users.index')
-       ->with('success',"Product ({$user->name}) Updated!");
+       ->with('success',"User ({$user->name}) Updated!");
+    }
+
+
+    public function editpass(User $user){
+        return view('admin.users.edit_pass',[
+            'user' => $user,
+        ]);
+    }
+
+    public function updatepass(Request $request, User $user){
+        // $data['password'] = Hash::make( $data['password']);
+        $user->password =  Hash::make($request->input('editpassword'));
+
+        // $data = $request->validate([
+        //     'editpassword' => 'required|min:8',
+        // ]);
+        $user->save();
+        return redirect()->route('users.index')
+       ->with('success',"user ({$user->name}) Updated!");
+
     }
 
     /**

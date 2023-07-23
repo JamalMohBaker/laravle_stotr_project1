@@ -56,7 +56,7 @@ class CartController extends Controller
 
 
         //redirect()->back() == back()
-        return back()
+        return  redirect()->route('cart')
         ->with('success', 'product added to cart');
 
     }

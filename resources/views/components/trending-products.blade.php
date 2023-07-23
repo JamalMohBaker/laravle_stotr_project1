@@ -11,10 +11,11 @@
             </div>
         </div>
         <div class="row">
+            {{-- $product->category->products()->where('id','<>',$product->id) --}}
             @foreach($products as $product)
             <div class="col-lg-3 col-md-6 col-12">
                 <x-product-card :product="$product" />
-                
+
             </div>
             @endforeach
         </div>

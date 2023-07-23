@@ -5,10 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderLine;
+use App\Models\User;
+use App\Notifications\NewOrderNotification;
 use Exception;
 use Illuminate\Http\Request;
+// use Illuminate\Notifications\Notification;
+// use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Symfony\Component\Intl\Countries;
 
 class CheckoutController extends Controller
@@ -75,12 +80,22 @@ class CheckoutController extends Controller
             DB::rollBack();
             return back()
             ->withInput() // old data input now
-            ->with('error', $e->getMessage());
+            ->with('success', $e->getMessage());
         }
+
+        //send notification to admin
+        $user = User::where('type','=','super-admin')->first();
+        $user->notify(new NewOrderNotification($order));
+        Notification::fake();
+        $user->notify(new NewOrderNotification($order));
 
 
          //Redirect to success page!
          return redirect()->route('checkout.success');
+    }
+
+    public function success(){
+        return view('shop.success');
     }
 }
 

@@ -1,9 +1,19 @@
 @extends('layouts.admin')
 
 @section('content')
+@if($errors->any())
+<div class="alert alert-danger">
+    you have some errors:
+    <ul>
+        @foreach($errors->all() as $error)
+        <li> {{ $error }} </li>
+        @endforeach
+    </ul>
+</div>
+@endif
     <h2 class="mb-4 fs-3"> Edit User</h2>
 
-    <form action="{{ route('users.update' , $user->id) }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('users.update' , $user->id) }}" method="post" >
         <!-- {{ csrf_field() }} -->
         @csrf
         {{-- Comment: Form Methood Spoofing --}}
@@ -18,9 +28,10 @@
             <div class="col-12">
                 <x-form.input type="email" label="User email" id="email" name="email" value="{{ $user->email }}" />
             </div>
-            <div class="col-12">
-                <x-form.input type="password" label="password" id="password" value="{{ $user->password }}" name="password" />
-            </div>
+            {{-- <div class="col-12"> --}}
+                <x-form.input type="hidden" label="password" id="password" value="{{ $user->password }}" name="password" />
+                <x-form.input type="hidden" label="password" id="password" name="password_confirmation" value="{{ $user->password }}" />
+            {{-- </div> --}}
 
             <div class="col-12">
                 <label for="type">Type</label>
@@ -39,6 +50,7 @@
                 </div>
 
             </div>
+
 
             <div class=" col-12 ">
                 <label for="status">status</label>

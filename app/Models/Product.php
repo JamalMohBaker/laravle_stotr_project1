@@ -82,6 +82,9 @@ class Product extends Model
     public function scopeActive(Builder $query){
         $query->where('status','=','active');
     }
+    public function scopeSlug(Builder $query , $slug){
+        $query->where('slug','=',$slug);
+    }
     //local scope
     public function scopeStatus(Builder $query , $status){
         $query->where('status','=',$status);

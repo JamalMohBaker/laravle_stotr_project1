@@ -27,10 +27,12 @@ class UserRequest extends FormRequest
         return [
             'name' => 'required|string|max:255|min:3',
             'email' => "required|unique:users,email,{$id}",
-            'password'=> 'required|string|min:8',
+            'password'=> 'required|string|min:8|confirmed',
             'status' => 'in:active,inactive,blocked',
             'type' => 'in:user,admin,super-admin',
-            // 'password_confirmation'=> 'required|string|min:8|confirmed',
+
+            // 'password_confirmation'=> ' required|string|min:8|confirmed',
         ];
     }
 }
+

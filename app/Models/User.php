@@ -46,6 +46,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'status',
         'type',
+
         // 'confirmpassword',
     ];
 
@@ -67,7 +68,8 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        // 'password' => 'hashed',
+        // 'editpassword' => 'hashed',
     ];
 
     public function profile()

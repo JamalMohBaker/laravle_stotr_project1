@@ -49,9 +49,9 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        RateLimiter::clear($this->throttleKey());
+        RateLimiter::clear($this->throttleKey()); //to remove failed attemps
     }
-
+    
     /**
      * Ensure the login request is not rate limited.
      *

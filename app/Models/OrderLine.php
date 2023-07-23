@@ -10,6 +10,7 @@ class OrderLine extends Pivot
 {
     use HasFactory;
     protected $table = 'order_lines';
+    public $timestamps = false;
      protected $fillable = [
      'order_id','product_id','product_name','price','quantity',
    ];
